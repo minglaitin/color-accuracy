@@ -5,15 +5,19 @@ import Results from './Results';
 
 const getRandomRgb = () => Math.floor(Math.random() * 256);
 
-const question = {
-	r: getRandomRgb(),
-	g: getRandomRgb(),
-	b: getRandomRgb()
+const generateQuestion = () => {
+	const question = {
+		r: getRandomRgb(),
+		g: getRandomRgb(),
+		b: getRandomRgb()
+	}
+	return question;
 };
 
 const calculateDistance = (p1, p2) => Math.sqrt((p1.r - p2.r)**2 + (p1.g - p2.g)**2 + (p1.b - p2.b)**2);
 
-function GameContainer({ colorMode, difficulty}) {
+function GameContainer({ colorMode, difficulty, endGame}) {
+	const [question, setQuestion] = useState(generateQuestion());
   const [userR, setUserR] = useState(0)
   const [userG, setUserG] = useState(0)
   const [userB, setUserB] = useState(0)
@@ -29,7 +33,7 @@ function GameContainer({ colorMode, difficulty}) {
 		<div>
 			<div style={{display: 'flex'}}>
 				<ColorPanel colorMode={colorMode} r={question.r} g={question.g} b={question.b} />
-				{difficulty === 'easy' && <ColorPanel colorMode={colorMode} r={userR} g={userG} b={userB}  />}
+				{(difficulty === 'easy' || score !== null) && <ColorPanel colorMode={colorMode} r={userR} g={userG} b={userB}  />}
 			</div>
 			{	score === null ?
 				<div>
@@ -39,7 +43,7 @@ function GameContainer({ colorMode, difficulty}) {
 					<button onClick={calculateResult}>Confirm</button>
 				</div>
 				:
-				<Results score={score} />
+				<Results score={score} endGame={endGame} question={question} answer={{r: userR, g: userG, b: userB}} />
 			}
 		</div>
 	);
