@@ -3,28 +3,32 @@ import SlideBar from './SlideBar'
 import ColorPanel from './ColorPanel'
 import Results from './Results';
 
-const getRandomRgb = () => Math.floor(Math.random() * 256);
+const getRandomValue = max => Math.floor(Math.random() * max);
 
-const generateQuestion = () => {
-	const question = {
-		r: getRandomRgb(),
-		g: getRandomRgb(),
-		b: getRandomRgb()
-	}
-	return question;
-};
+const generateQuestion = (colorMode) => 
+	colorMode === 'rgb'
+	? [getRandomValue(256), getRandomValue(256), getRandomValue(256)]
+	: [getRandomValue(361), getRandomValue(101), getRandomValue(101)];
 
-const calculateDistance = (p1, p2) => Math.sqrt((p1.r - p2.r)**2 + (p1.g - p2.g)**2 + (p1.b - p2.b)**2);
+const calculateDistance = (p1, p2) => Math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2 + (p1[2] - p2[2])**2);
 
 function GameContainer({ colorMode, difficulty, endGame}) {
-	const [question, setQuestion] = useState(generateQuestion());
-  const [userR, setUserR] = useState(0)
-  const [userG, setUserG] = useState(0)
-  const [userB, setUserB] = useState(0)
+	const [question, setQuestion] = useState(() => generateQuestion(colorMode));
 	const [score, setScore] = useState(null);
 
+  const [value1, setValue1] = useState(0);
+  const [value2, setValue2] = useState(0);
+  const [value3, setValue3] = useState(0);
+	
+	const userAnswer = [value1, value2, value3];
+	const setUserAnswer = [setValue1, setValue2, setValue3];
+
+	const labels = colorMode === 'rgb' ? ['Red', 'Green', 'Blue'] : ['Hue', 'Saturation', 'Lightness'];
+  const maxValues = colorMode === 'rgb' ? [255, 255, 255] : [360, 100, 100];
+
+	// result for RGB mode
 	function calculateResult() {
-		const distance = calculateDistance(question, {r: userR, g: userG, b: userB});
+		const distance = calculateDistance(question, userAnswer);
 		const result = (1 - distance / Math.sqrt(195075)) * 100; // 255^2 + 255^2 + 255^2 = 195075
 		setScore(result);
 	}
@@ -32,18 +36,18 @@ function GameContainer({ colorMode, difficulty, endGame}) {
 	return (
 		<div>
 			<div style={{display: 'flex'}}>
-				<ColorPanel colorMode={colorMode} r={question.r} g={question.g} b={question.b} />
-				{(difficulty === 'easy' || score !== null) && <ColorPanel colorMode={colorMode} r={userR} g={userG} b={userB}  />}
+				<ColorPanel colorMode={colorMode} colorValues={question} />
+				{(difficulty === 'easy' || score !== null) && <ColorPanel colorMode={colorMode} colorValues={userAnswer}  />}
 			</div>
 			{	score === null ?
 				<div>
-					<SlideBar label='Red' value={userR} handleChange={e => setUserR(e.target.value)} />
-					<SlideBar label='Green' value={userG} handleChange={e => setUserG(e.target.value)} />
-					<SlideBar label='Blue' value={userB} handleChange={e => setUserB(e.target.value)} />
+					{labels.map((label, i) => (
+						<SlideBar label={label} max={maxValues[i]} value={userAnswer[i]} handleChange={e => setUserAnswer[i](e.target.value)} />
+					))}
 					<button onClick={calculateResult}>Confirm</button>
 				</div>
 				:
-				<Results score={score} endGame={endGame} question={question} answer={{r: userR, g: userG, b: userB}} />
+				<Results colorMode={colorMode} score={score} endGame={endGame} question={question} answer={userAnswer} />
 			}
 		</div>
 	);

@@ -1,4 +1,4 @@
-function ColorPanel({colorMode, r, g, b}) {
+function ColorPanel({colorMode, colorValues}) {
 
   let panelStyle = {
     height: '200px',
@@ -8,13 +8,13 @@ function ColorPanel({colorMode, r, g, b}) {
   };
 
   if (colorMode === 'rgb') {
-    panelStyle.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+    panelStyle.backgroundColor = `rgb(${colorValues[0]}, ${colorValues[1]}, ${colorValues[2]})`;
+  } else {
+    panelStyle.backgroundColor = `hsl(${colorValues[0]}, ${colorValues[1]}%, ${colorValues[2]}%)`;
   }
 
   return (
-    <>
     <div className='color-panel' style={panelStyle}></div>
-    </>
   );
 }
 
