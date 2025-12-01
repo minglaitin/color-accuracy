@@ -8,7 +8,7 @@ const getRandomValue = max => Math.floor(Math.random() * max);
 const generateQuestion = colorMode => 
 	colorMode === 'rgb'
 	? [getRandomValue(256), getRandomValue(256), getRandomValue(256)]
-	: [getRandomValue(361), getRandomValue(101), getRandomValue(101)];
+	: [getRandomValue(360), getRandomValue(101), getRandomValue(101)];
 
 const calcDistSq = (p1, p2) => (p1[0] - p2[0])**2 + (p1[1] - p2[1])**2 + (p1[2] - p2[2])**2;
 
@@ -54,7 +54,7 @@ function GameContainer({ colorMode, difficulty, endGame}) {
 	const setUserAnswer = [setValue1, setValue2, setValue3];
 
 	const labels = colorMode === 'rgb' ? ['Red', 'Green', 'Blue'] : ['Hue', 'Saturation', 'Lightness'];
-  const maxValues = colorMode === 'rgb' ? [255, 255, 255] : [360, 100, 100];
+  const maxValues = colorMode === 'rgb' ? [255, 255, 255] : [359, 100, 100];
 
 	// calculate the distance between two points in the RGB model
 	function calculateResult() {
@@ -74,7 +74,7 @@ function GameContainer({ colorMode, difficulty, endGame}) {
 			{	score === null ?
 				<div>
 					{labels.map((label, i) => (
-						<SlideBar label={label} max={maxValues[i]} value={userAnswer[i]} handleChange={e => setUserAnswer[i](e.target.value)} />
+						<SlideBar key={i} label={label} max={maxValues[i]} value={userAnswer[i]} handleChange={e => setUserAnswer[i](e.target.value)} />
 					))}
 					<button onClick={calculateResult}>Confirm</button>
 				</div>
