@@ -5,12 +5,42 @@ import Results from './Results';
 
 const getRandomValue = max => Math.floor(Math.random() * max);
 
-const generateQuestion = (colorMode) => 
+const generateQuestion = colorMode => 
 	colorMode === 'rgb'
 	? [getRandomValue(256), getRandomValue(256), getRandomValue(256)]
 	: [getRandomValue(361), getRandomValue(101), getRandomValue(101)];
 
-const calculateDistance = (p1, p2) => Math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2 + (p1[2] - p2[2])**2);
+const calcDistSq = (p1, p2) => (p1[0] - p2[0])**2 + (p1[1] - p2[1])**2 + (p1[2] - p2[2])**2;
+
+const hslToRgb = input => {
+	let [hue, saturation, lightness] = input;
+	hue = hue % 360;
+	saturation *= 0.01;
+	lightness *= 0.01;
+	const chroma = (1 - Math.abs(2 * lightness - 1)) * saturation;
+	const h = hue / 60;
+	const x = chroma * (1 - Math.abs(h % 2 - 1));
+
+	let temp;
+	if (h < 1) {
+		temp = [chroma, x, 0];
+	} else if (h < 2) {
+		temp = [x, chroma, 0];
+	} else if (h < 3) {
+		temp = [0, chroma, x];
+	} else if (h < 4) {
+		temp = [0, x, chroma];
+	} else if (h < 5) {
+		temp = [x, 0, chroma];
+	} else {
+		temp = [chroma, 0, x];
+	}
+
+	const m = lightness - chroma / 2;
+	const output = temp.map(element => Math.round((element + m) * 255));
+
+	return output;
+}
 
 function GameContainer({ colorMode, difficulty, endGame}) {
 	const [question, setQuestion] = useState(() => generateQuestion(colorMode));
@@ -26,10 +56,12 @@ function GameContainer({ colorMode, difficulty, endGame}) {
 	const labels = colorMode === 'rgb' ? ['Red', 'Green', 'Blue'] : ['Hue', 'Saturation', 'Lightness'];
   const maxValues = colorMode === 'rgb' ? [255, 255, 255] : [360, 100, 100];
 
-	// result for RGB mode
+	// calculate the distance between two points in the RGB model
 	function calculateResult() {
-		const distance = calculateDistance(question, userAnswer);
-		const result = (1 - distance / Math.sqrt(195075)) * 100; // 255^2 + 255^2 + 255^2 = 195075
+		const questionRgb = colorMode === 'rgb' ? question : hslToRgb(question);
+		const userAnswerRgb = colorMode === 'rgb' ? userAnswer : hslToRgb(userAnswer);
+		const distSq = calcDistSq(questionRgb, userAnswerRgb);
+		const result = (1 - Math.sqrt(distSq / 195075)) * 100; // 255^2 + 255^2 + 255^2 = 195075
 		setScore(result);
 	}
 
