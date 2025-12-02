@@ -1,16 +1,24 @@
-# React + Vite
+# Color Matching Challenge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a color matching game that allows users to test their precision in guessing color values.
 
-Currently, two official plugins are available:
+Users need to guess the RGB or HSL values of the random generated color.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Score Calculation
 
-## React Compiler
+### RGB Mode
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Let RGB values of the question be ($R_1$, $G_1$, $B_1$),\
+RGB values of the submitted answer be ($R_2$, $G_2$, $B_2$).
 
-## Expanding the ESLint configuration
+Score = $(1-\sqrt{\frac{(R_1-R_2)^2+(G_1-G_2)^2+(B_1-B_2)^2}{255^2+255^2+255^2}})\times100$
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### HSL Mode
+
+Convert the HSL values to RGB values using [this formula](https://en.wikipedia.org/wiki/HSL_and_HSV#HSL_to_RGB).
+
+Then perform the calculation used in RGB mode.
+
+## Tools Used
+
+- React + Vite
