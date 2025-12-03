@@ -19,6 +19,11 @@ Convert the HSL values to RGB values using [this formula](https://en.wikipedia.o
 
 Then perform the calculation used in RGB mode.
 
+## Future Developments
+
+- CSS
+- Store best results in browser local storage
+
 ## Tools Used
 
 - React + Vite
