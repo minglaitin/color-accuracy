@@ -4,6 +4,8 @@ This is a color matching game that allows users to test their precision in guess
 
 Users need to guess the RGB or HSL values of the random generated color.
 
+[Click here to play](https://minglaitin.github.io/color-accuracy/)
+
 ## Score Calculation
 
 ### RGB Mode
@@ -22,6 +24,7 @@ Then perform the calculation used in RGB mode.
 ## Future Developments
 
 - CSS
+- New mode: Fixed hue value for HSL
 - Store best results in browser local storage
 
 ## Tools Used
