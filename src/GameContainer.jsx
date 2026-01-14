@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SlideBar from './SlideBar'
 import ColorPanel from './ColorPanel'
 import Results from './Results';
@@ -46,9 +46,19 @@ function GameContainer({ colorMode, difficulty, endGame}) {
 	const [question, setQuestion] = useState(() => generateQuestion(colorMode));
 	const [score, setScore] = useState(null);
 
+  // slide bar values
   const [value1, setValue1] = useState(0);
   const [value2, setValue2] = useState(0);
   const [value3, setValue3] = useState(0);
+
+  // if colorMode is 'hsl_fixed_hue', provide the hue value after the question is generated
+  useEffect(() => {
+    if (colorMode === 'hsl_fixed_hue' && question) {
+      setValue1(question[0]);
+    } else {
+      setValue1(0);
+    }
+  }, [colorMode, question]);
 	
 	const userAnswer = [value1, value2, value3];
 	const setUserAnswer = [setValue1, setValue2, setValue3];
@@ -74,7 +84,7 @@ function GameContainer({ colorMode, difficulty, endGame}) {
 			{	score === null ?
 				<div>
 					{labels.map((label, i) => (
-						<SlideBar key={i} label={label} max={maxValues[i]} value={userAnswer[i]} handleChange={e => setUserAnswer[i](e.target.value)} />
+						<SlideBar key={i} label={label} max={maxValues[i]} value={userAnswer[i]} handleChange={e => setUserAnswer[i](e.target.value)} disabled={colorMode === 'hsl_fixed_hue' && i === 0} />
 					))}
 					<button onClick={calculateResult}>Confirm</button>
 				</div>

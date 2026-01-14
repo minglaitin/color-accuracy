@@ -9,6 +9,7 @@ function TitleScreen({ colorMode, setColorMode, difficulty, setDifficulty, setGa
       <div className='color-mode-container'>
         <button onClick={() => setColorMode('rgb')} style={colorMode === 'rgb' ? selectedButtonStyle : {}}>RGB</button>
         <button onClick={() => setColorMode('hsl')} style={colorMode === 'hsl' ? selectedButtonStyle : {}}>HSL</button>
+        <button onClick={() => setColorMode('hsl_fixed_hue')} style={colorMode === 'hsl_fixed_hue' ? selectedButtonStyle : {}}>HSL (fixed hue)</button>
       </div>
       <div className='difficulty-container'>
         <button onClick={() => setDifficulty('easy')} style={difficulty === 'easy' ? selectedButtonStyle : {}}>Easy</button>

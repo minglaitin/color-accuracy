@@ -6,6 +6,9 @@ Users need to guess the RGB or HSL values of the random generated color.
 
 [Click here to play](https://minglaitin.github.io/color-accuracy/)
 
+## Recent Changes
+- **[2026-01-14]** Added a new game mode: HSL (fixed hue).
+
 ## Score Calculation
 
 ### RGB Mode
@@ -24,7 +27,6 @@ Then perform the calculation used in RGB mode.
 ## Future Developments
 
 - CSS
-- New mode: Fixed hue value for HSL
 - Store best results in browser local storage
 
 ## Tools Used
