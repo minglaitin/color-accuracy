@@ -4,6 +4,11 @@ This is a color matching game that allows users to test their precision in guess
 
 Users need to guess the RGB or HSL values of the random generated color.
 
+[Click here to play](https://minglaitin.github.io/color-accuracy/)
+
+## Recent Changes
+- **[2026-01-14]** Added a new game mode: HSL (fixed hue).
+
 ## Score Calculation
 
 ### RGB Mode
